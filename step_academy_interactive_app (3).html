@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>أكاديمية ستيب | STEP Academy</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            arabic: ['Cairo', 'sans-serif'],
+            english: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+              900: '#064e3b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Tajawal', 'Cairo', sans-serif;
+      background-color: #f1f5f9;
+      color: #0f172a;
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .en-text {
+      font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+      direction: ltr;
+      text-align: left;
+    }
+    .duo-btn {
+      transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 0 rgba(0, 0, 0, 0.18);
+    }
+    .duo-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.18);
+    }
+    .duo-btn-emerald {
+      background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+      box-shadow: 0 4px 0 #047857;
+    }
+    .duo-btn-emerald:active {
+      box-shadow: 0 1px 0 #047857;
+    }
+    @keyframes slideUpFade {
+      from { opacity: 0; transform: translateY(24px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .card-enter {
+      animation: slideUpFade 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes soundWave {
+      0%, 100% { height: 6px; }
+      50% { height: 20px; }
+    }
+    .wave-bar {
+      width: 3px;
+      background-color: #10b981;
+      border-radius: 9999px;
+      height: 6px;
+    }
+    .playing .wave-bar:nth-child(1) { animation: soundWave 0.6s infinite 0.0s; }
+    .playing .wave-bar:nth-child(2) { animation: soundWave 0.6s infinite 0.15s; }
+    .playing .wave-bar:nth-child(3) { animation: soundWave 0.6s infinite 0.3s; }
+    .playing .wave-bar:nth-child(4) { animation: soundWave 0.6s infinite 0.45s; }
+    .sentence-span {
+      transition: background-color 0.25s ease, color 0.25s ease;
+      border-radius: 6px;
+      padding: 2px 4px;
+    }
+    .sentence-active {
+      background-color: #d1fae5;
+      color: #064e3b;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-start bg-slate-100">
+
+  <!-- Mobile-First App Shell -->
+  <div id="app-shell" class="w-full max-w-[440px] min-h-screen bg-white shadow-2xl flex flex-col relative overflow-hidden">
+
+    <!-- ==================== TOP STATUS HEADER ==================== -->
+    <header id="top-header" class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-100 px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center text-white font-black text-lg shadow-sm">
+          S
+        </div>
+        <div>
+          <h1 class="text-sm font-extrabold text-slate-800 leading-tight">أكاديمية ستيب</h1>
+          <span id="header-level-badge" class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">
+            <i class="fa-solid fa-layer-group text-[10px]"></i>
+            <span id="header-level-text">المستوى 1 (Pre-A1)</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- XP & Streak Badges -->
+      <div class="flex items-center gap-2">
+        <div class="flex items-center gap-1 bg-amber-50 text-amber-600 px-2.5 py-1 rounded-full text-xs font-extrabold border border-amber-200/60" title="نقاط الخبرة">
+          <i class="fa-solid fa-bolt"></i>
+          <span id="xp-counter">120</span>
+        </div>
+        <div class="flex items-center gap-1 bg-rose-50 text-rose-600 px-2.5 py-1 rounded-full text-xs font-extrabold border border-rose-200/60" title="سلسلة الأيام">
+          <i class="fa-solid fa-fire"></i>
+          <span id="streak-counter">3</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Daily Goal Progress Bar -->
+    <div id="daily-progress-wrap" class="bg-slate-50 px-4 py-1.5 border-b border-slate-100 flex items-center gap-3">
+      <span class="text-[11px] font-bold text-slate-500 whitespace-nowrap">هدف اليوم:</span>
+      <div class="flex-1 h-2 bg-slate-200 rounded-full overflow-hidden">
+        <div id="daily-goal-bar" class="h-full bg-gradient-to-l from-emerald-500 to-teal-400 rounded-full transition-all duration-500" style="width: 15%"></div>
+      </div>
+      <span id="daily-goal-label" class="text-[11px] font-extrabold text-emerald-700 whitespace-nowrap">3 / 20 دقيقة</span>
+    </div>
+
+    <!-- ==================== MAIN VIEW CONTAINER ==================== -->
+    <main id="main-content" class="flex-1 flex flex-col overflow-y-auto pb-20">
+
+      <!-- =========================================================== -->
+      <!-- SCREEN 1: DASHBOARD & GOAL SETUP (FIRST PAGE)                -->
+      <!-- =========================================================== -->
+      <section id="screen-onboarding" class="p-4 flex-1 flex flex-col justify-between card-enter">
+        <div>
+          <!-- Emerald Green Hero Banner -->
+          <div class="bg-gradient-to-br from-emerald-600 via-teal-600 to-emerald-800 rounded-3xl p-5 text-white shadow-lg mb-5 relative overflow-hidden">
+            <div class="absolute -left-6 -bottom-6 w-28 h-28 bg-white/10 rounded-full"></div>
+            <div class="absolute left-4 top-3 text-emerald-200/25 text-5xl">
+              <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <span class="inline-block bg-white/20 backdrop-blur-sm text-xs font-bold px-3 py-1 rounded-full mb-2">
+              منصة التحضير الذكية لاختبار STEP
+            </span>
+            <h2 class="text-xl font-black leading-snug mb-1.5">طريقك الأسرع لدرجة +85 في اختبار ستيب!</h2>
+            <p class="text-xs text-emerald-50 leading-relaxed">
+              تعلّم بأسلوب البطاقات السريعة (Reels)، استمع للنصوص بصوت واضح، واحصل على شرح عربي مبسط لكل قاعدة ومفردة.
+            </p>
+          </div>
+
+          <!-- Daily Time Goal Options -->
+          <div class="mb-4">
+            <label class="block text-sm font-extrabold text-slate-800 mb-2">
+              <i class="fa-regular fa-clock text-emerald-600 ml-1"></i>
+              1. كم دقيقة تريد أن تتدرب يومياً؟
+            </label>
+            <div class="grid grid-cols-3 gap-2.5" id="time-goal-options">
+              <button type="button" onclick="selectTimeGoal(10, this)" class="goal-time-btn p-3 rounded-2xl border-2 border-slate-200 bg-white text-center transition-all hover:border-emerald-400">
+                <div class="text-sm font-black text-slate-800">10 دقائق</div>
+                <div class="text-[11px] font-bold text-slate-500">خفيف 🌱</div>
+              </button>
+              <button type="button" onclick="selectTimeGoal(20, this)" class="goal-time-btn p-3 rounded-2xl border-2 border-emerald-500 bg-emerald-50/70 text-center transition-all">
+                <div class="text-sm font-black text-emerald-800">20 دقيقة</div>
+                <div class="text-[11px] font-bold text-emerald-600">منتظم 🔥</div>
+              </button>
+              <button type="button" onclick="selectTimeGoal(30, this)" class="goal-time-btn p-3 rounded-2xl border-2 border-slate-200 bg-white text-center transition-all hover:border-emerald-400">
+                <div class="text-sm font-black text-slate-800">30 دقيقة</div>
+                <div class="text-[11px] font-bold text-slate-500">مكثّف 🚀</div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Vocabulary Target Options -->
+          <div class="mb-5">
+            <label class="block text-sm font-extrabold text-slate-800 mb-2">
+              <i class="fa-solid fa-book-open text-amber-500 ml-1"></i>
+              2. كم مفردة من مفردات STEP تريد حفظها أسبوعياً؟
+            </label>
+            <div class="grid grid-cols-3 gap-2.5" id="vocab-goal-options">
+              <button type="button" onclick="selectVocabGoal(25, this)" class="goal-vocab-btn p-3 rounded-2xl border-2 border-slate-200 bg-white text-center transition-all">
+                <div class="text-sm font-black text-slate-800">25 كلمة</div>
+                <div class="text-[11px] font-bold text-slate-500">تأسيسي 📖</div>
+              </button>
+              <button type="button" onclick="selectVocabGoal(50, this)" class="goal-vocab-btn p-3 rounded-2xl border-2 border-amber-500 bg-amber-50/70 text-center transition-all">
+                <div class="text-sm font-black text-amber-800">50 كلمة</div>
+                <div class="text-[11px] font-bold text-amber-600">متوازن ⭐</div>
+              </button>
+              <button type="button" onclick="selectVocabGoal(100, this)" class="goal-vocab-btn p-3 rounded-2xl border-2 border-slate-200 bg-white text-center transition-all">
+                <div class="text-sm font-black text-slate-800">100 كلمة</div>
+                <div class="text-[11px] font-bold text-slate-500">متقدم 🏆</div>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="space-y-2.5 pt-1">
+          <button type="button" onclick="startPlacementTest()" class="w-full duo-btn duo-btn-emerald text-white font-extrabold py-3.5 px-4 rounded-2xl flex items-center justify-between text-sm">
+            <span class="flex items-center gap-2">
+              <i class="fa-solid fa-wand-magic-sparkles text-amber-300 text-base"></i>
+              <span>ابدأ اختبار تحديد المستوى (5 أسئلة)</span>
+            </span>
+            <i class="fa-solid fa-arrow-left text-xs"></i>
+          </button>
+
+          <button type="button" onclick="openRoadmap()" class="w-full py-3.5 px-4 rounded-2xl bg-[#1B365D] hover:bg-slate-800 text-white font-extrabold text-sm flex items-center justify-between transition shadow-sm">
+            <span class="flex items-center gap-2">
+              <i class="fa-solid fa-route text-emerald-400"></i>
+              <span>الدخول مباشرة إلى مسار المستوى 1 (10 جلسات)</span>
+            </span>
+            <span class="text-[11px] bg-white/15 px-2 py-0.5 rounded-lg">10 دروس</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- =========================================================== -->
+      <!-- SCREEN 2: DIAGNOSTIC PLACEMENT TEST                         -->
+      <!-- =========================================================== -->
+      <section id="screen-placement" class="hidden p-4 flex-1 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-extrabold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full">
+              اختبار تحديد المستوى الذكي
+            </span>
+            <span id="placement-counter" class="text-xs font-extrabold text-slate-500">سؤال 1 من 5</span>
+          </div>
+          <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden mb-5">
+            <div id="placement-progress-bar" class="h-full bg-emerald-500 transition-all duration-300 rounded-full" style="width: 20%"></div>
+          </div>
+
+          <div id="placement-card" class="bg-white border-2 border-slate-100 rounded-3xl p-5 shadow-sm card-enter">
+            <div class="flex items-center justify-between mb-3">
+              <span id="placement-skill-tag" class="text-[11px] font-bold bg-indigo-50 text-indigo-700 px-2.5 py-1 rounded-lg">
+                القواعد • Grammar
+              </span>
+              <span id="placement-level-indicator" class="text-[11px] font-bold text-slate-400">
+                معايرة المستوى 1
+              </span>
+            </div>
+
+            <div id="placement-context-box" class="hidden mb-3 p-3.5 bg-slate-50 rounded-2xl border border-slate-200/80">
+              <p id="placement-context-text" class="en-text text-sm text-slate-700 leading-relaxed"></p>
+            </div>
+
+            <p id="placement-question-text" class="en-text text-base font-bold text-slate-900 mb-4 leading-relaxed"></p>
+            <div id="placement-options" class="space-y-2.5"></div>
+          </div>
+        </div>
+
+        <div class="pt-4 flex items-center justify-between text-xs text-slate-400">
+          <button type="button" onclick="switchScreen('onboarding')" class="hover:text-slate-600 font-bold">
+            <i class="fa-solid fa-arrow-right ml-1"></i> إلغاء والعودة
+          </button>
+          <span>تقييم سريع من المستوى 1 إلى 10</span>
+        </div>
+      </section>
+
+      <!-- =========================================================== -->
+      <!-- SCREEN 2B: PLACEMENT RESULT                                 -->
+      <!-- =========================================================== -->
+      <section id="screen-placement-result" class="hidden p-5 flex-1 flex flex-col justify-center items-center text-center card-enter">
+        <div class="w-20 h-20 rounded-3xl bg-gradient-to-br from-amber-400 to-orange-500 text-white flex items-center justify-center text-4xl shadow-lg mb-4">
+          <i class="fa-solid fa-trophy"></i>
+        </div>
+        <span class="text-xs font-extrabold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full mb-2">
+          تم تحديد مستواك بنجاح!
+        </span>
+        <h2 class="text-2xl font-black text-slate-900 mb-1">التشخيص: <span class="text-emerald-600">المستوى 1 (Pre-A1)</span></h2>
+        <p class="text-xs font-bold text-slate-500 mb-5">نبدأ معك بخطة التأسيس الشاملة لاختبار STEP</p>
+
+        <button type="button" onclick="openRoadmap()" class="w-full duo-btn duo-btn-emerald text-white font-extrabold py-4 px-6 rounded-2xl text-base flex items-center justify-center gap-2">
+          <span>الدخول إلى مسار المستوى 1 (10 جلسات)</span>
+          <i class="fa-solid fa-arrow-left"></i>
+        </button>
+      </section>
+
+      <!-- =========================================================== -->
+      <!-- SCREEN 3: 10-SESSION ROADMAP                                -->
+      <!-- =========================================================== -->
+      <section id="screen-roadmap" class="hidden p-4 flex-1 flex flex-col">
+        <div class="bg-gradient-to-l from-[#1B365D] to-[#2C6E7F] rounded-3xl p-4 text-white mb-4 shadow-md">
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="text-xs font-extrabold bg-white/15 px-2.5 py-1 rounded-full">
+              <i class="fa-solid fa-map-location-dot ml-1"></i> مسار المستوى 1 (Pre-A1 → A1)
+            </span>
+            <span id="roadmap-completion-badge" class="text-xs font-black text-amber-300">
+              0 / 10 جلسات مكتملة
+            </span>
+          </div>
+          <h2 class="text-base font-black mb-1">10 جلسات تأسيسية متدرجة لاختبار STEP</h2>
+          <p class="text-[11px] text-slate-200 leading-relaxed">
+            تحتوي كل جلسة على 6 بطاقات تفاعلية (مفردات، قواعد، قراءة صوتية، استماع، كتابة، وتحدث). أكمل الجلسة لفتح التالية!
+          </p>
+        </div>
+
+        <div id="session-list-container" class="space-y-3 pb-4"></div>
+      </section>
+
+      <!-- =========================================================== -->
+      <!-- SCREEN 4: REELS 6-CARD SESSION PLAYER                       -->
+      <!-- =========================================================== -->
+      <section id="screen-feed" class="hidden flex-1 flex flex-col p-4">
+        <div class="flex items-center justify-between mb-3 bg-slate-50 border border-slate-200/80 rounded-2xl px-3 py-2">
+          <button type="button" onclick="openRoadmap()" class="text-xs font-extrabold text-[#1B365D] hover:text-emerald-700 flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-xl border border-slate-200">
+            <i class="fa-solid fa-arrow-right"></i>
+            <span>المسار</span>
+          </button>
+          <div class="text-center">
+            <div id="active-session-title" class="text-xs font-black text-slate-800">الجلسة 1 من 10</div>
+            <div id="active-session-subtitle" class="text-[10px] font-bold text-emerald-600">بطاقة 1 من 6</div>
+          </div>
+          <span class="text-xs font-extrabold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-xl border border-amber-200/60">+50 XP</span>
+        </div>
+
+        <div id="reels-dots" class="flex items-center gap-1.5 mb-3"></div>
+        <div id="reel-card-container" class="flex-1 flex flex-col"></div>
+
+        <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-3">
+          <button type="button" id="prev-card-btn" onclick="prevReelCard()" class="px-4 py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-xs flex items-center gap-1.5 transition disabled:opacity-40">
+            <i class="fa-solid fa-chevron-right"></i>
+            <span>السابق</span>
+          </button>
+          <span id="reel-step-counter" class="text-xs font-extrabold text-slate-400">1 / 6</span>
+          <button type="button" id="next-card-btn" onclick="nextReelCard()" class="flex-1 duo-btn duo-btn-emerald text-white font-extrabold py-3 px-5 rounded-2xl text-sm flex items-center justify-center gap-2">
+            <span>البطاقة التالية</span>
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ==================== BOTTOM NAVIGATION BAR ==================== -->
+    <nav id="bottom-nav" class="fixed bottom-0 w-full max-w-[440px] bg-white/95 backdrop-blur-md border-t border-slate-200 px-6 py-2.5 flex items-center justify-around z-30">
+      <button type="button" onclick="openRoadmap()" id="nav-roadmap" class="nav-tab flex flex-col items-center gap-1 text-slate-400 hover:text-slate-700 font-bold">
+        <i class="fa-solid fa-route text-lg"></i>
+        <span class="text-[11px]">مسار الجلسات</span>
+      </button>
+      <button type="button" onclick="startPlacementTest()" id="nav-placement" class="nav-tab flex flex-col items-center gap-1 text-slate-400 hover:text-slate-700 font-bold">
+        <i class="fa-solid fa-compass text-lg"></i>
+        <span class="text-[11px]">اختبار المستوى</span>
+      </button>
+      <button type="button" onclick="switchScreen('onboarding')" id="nav-goals" class="nav-tab flex flex-col items-center gap-1 text-emerald-600 font-extrabold">
+        <i class="fa-solid fa-sliders text-lg"></i>
+        <span class="text-[11px]">الأهداف والبداية</span>
+      </button>
+    </nav>
+
+    <!-- Toast Box -->
+    <div id="toast-box" class="fixed top-16 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 transition-all duration-300">
+      <div id="toast-msg" class="bg-slate-900 text-white text-xs font-extrabold px-4 py-2.5 rounded-2xl shadow-xl flex items-center gap-2"></div>
+    </div>
+
+  </div>
+
+  <!-- ==================== SCRIPT ENGINE ==================== -->
+  <script>
+    const appState = {
+      level: 1,
+      dailyMinutesGoal: 20,
+      weeklyVocabGoal: 50,
+      minutesCompleted: 3,
+      xp: 120,
+      streak: 3,
+      unlockedSession: 1,
+      completedSessions: [],
+      activeSessionId: 1,
+      currentCardIndex: 0,
+      placementIndex: 0,
+      placementScore: 0,
+      placementAnswered: false,
+      speechRate: 0.9,
+      isSpeaking: false,
+      answeredCards: new Set()
+    };
+
+    const placementQuestions = [
+      { level: 1, skill: 'القواعد • Grammar (Level 1)', context: null, question: 'My name ______ Tariq, and I am from Riyadh.', options: ['am', 'is', 'are', 'be'], correct: 1 },
+      { level: 3, skill: 'القواعد • Grammar (Level 3)', context: null, question: 'Please be quiet! The students ______ their English test right now.', options: ['take', 'takes', 'are taking', 'took'], correct: 2 },
+      { level: 5, skill: 'المفردات • Vocabulary (Level 5)', context: 'Desert regions receive more sunlight per year than almost any other place on Earth.', question: 'The word "abundant" is closest in meaning to:', options: ['rare', 'plentiful', 'dangerous', 'expensive'], correct: 1 },
+      { level: 7, skill: 'القواعد • Grammar (Level 7)', context: null, question: 'Millions of tons of dates ______ in Saudi Arabia every year.', options: ['produce', 'are produced', 'produced', 'have produced'], correct: 1 },
+      { level: 10, skill: 'القواعد المتقدمة (Level 10)', context: null, question: 'Not only ______ the initial hypothesis, but the study also uncovered new data.', options: ['the findings confirmed', 'did the findings confirm', 'confirmed the findings', 'the findings did confirm'], correct: 1 }
+    ];
+
+    const level1Sessions = [
+      {
+        id: 1,
+        title: 'الجلسة 1: التعريف بالنفس والأفعال المساعدة (Verb to Be)',
+        subtitle: 'مفردات: Identify, Candidate, Require • القاعدة: am / is / are',
+        cards: [
+          {
+            type: 'vocab',
+            badge: '1/6 • مفردات STEP الأساسية',
+            badgeColor: 'bg-amber-100 text-amber-800',
+            icon: 'fa-spell-check',
+            title: 'مفردات تتكرر في تعليمات وأسئلة اختبار STEP',
+            vocabItems: [
+              { word: 'Identify (v)', ar: 'يُحدّد / يتعرّف على' },
+              { word: 'Candidate (n)', ar: 'مُتقدّم للاختبار' },
+              { word: 'Require (v)', ar: 'يتطلّب / يستلزم' }
+            ],
+            exampleEn: 'Candidates are required to identify the main idea of each passage.',
+            exampleAr: 'يُطلب من المتقدمين للاختبار تحديد الفكرة الرئيسية لكل قطعة.',
+            arabicTip: '💡 تلميح STEP: فعل (Identify) يظهر في معظم أسئلة القراءة.',
+            quizQuestion: 'What does "Identify" mean in STEP reading questions?',
+            quizOptions: ['Ignore', 'Determine / Recognize', 'Delete', 'Forget'],
+            quizCorrect: 1,
+            explanationAr: 'أحسنت! كلمة Identify تعني يُحدّد أو يتعرّف على.'
+          },
+          {
+            type: 'grammar',
+            badge: '2/6 • القواعد (Grammar)',
+            badgeColor: 'bg-indigo-100 text-indigo-800',
+            icon: 'fa-code-branch',
+            title: 'استخدام (am / is / are) في الجمل الاسمية',
+            ruleExplanationAr: 'في اختبار STEP، انتبه لمطابقة الفاعل مع الفعل المساعد: الضمير <b>I</b> يأخذ <b>am</b>، والمفرد (He/She/It) يأخذ <b>is</b>، والجمع يأخذ <b>are</b>.',
+            formulaEn: 'I + am  |  He/She/It + is  |  You/We/They + are',
+            quizQuestion: 'The official exam results ______ available online today.',
+            quizOptions: ['is', 'am', 'are', 'be'],
+            quizCorrect: 2,
+            explanationAr: 'رائع! كلمة (results) جمع، لذا نستخدم معها are.'
+          },
+          {
+            type: 'reading',
+            badge: '3/6 • قراءة صوتية (Audio Reading)',
+            badgeColor: 'bg-emerald-100 text-emerald-800',
+            icon: 'fa-headphones',
+            title: 'استمع واقرأ البطاقة التعريفية للمتقدم',
+            sentences: [
+              'Omar Al-Harbi is a university candidate in Riyadh.',
+              'His STEP exam is at nine o’clock in the morning.',
+              'He is required to bring his national ID card to the testing center.'
+            ],
+            arabicSummaryAr: 'ملخص القطعة: عمر الحربي متقدم جامعي في الرياض، اختباره الساعة 9 صباحاً.',
+            quizQuestion: 'What is Omar required to bring to the testing center?',
+            quizOptions: ['A dictionary', 'His national ID card', 'A laptop', 'A notebook'],
+            quizCorrect: 1,
+            explanationAr: 'إجابة دقيقة! الجملة الثالثة ذكرت: bring his national ID card.'
+          },
+          {
+            type: 'listening',
+            badge: '4/6 • استماع (Listening)',
+            badgeColor: 'bg-sky-100 text-sky-800',
+            icon: 'fa-ear-listen',
+            title: 'محادثة قصيرة في قاعة اختبار STEP',
+            audioScript: 'Clerk: Good morning. Are you here for the STEP exam? Student: Yes, I am. My seat number is forty-two.',
+            arabicContextAr: 'استمع للحوار القصير وركّز على رقم المقعد.',
+            quizQuestion: 'What is the student’s seat number?',
+            quizOptions: ['24', '42', '14', '40'],
+            quizCorrect: 1,
+            explanationAr: 'ممتاز! الرقم المذكور هو forty-two أي 42.'
+          },
+          {
+            type: 'writing',
+            badge: '5/6 • تحليل الكتابة (Writing Analysis)',
+            badgeColor: 'bg-purple-100 text-purple-800',
+            icon: 'fa-pen-nib',
+            title: 'الحروف الكبيرة وعلامات الترقيم (Capitalization)',
+            lessonNoteAr: 'تبدأ الجملة وأسماء المدن دائماً بحرف كبير وتنتهي بنقطة.',
+            quizQuestion: 'Choose the sentence with CORRECT capitalization:',
+            quizOptions: ['sara lives in jeddah.', 'Sara lives in Jeddah.', 'Sara lives in jeddah?', 'sara lives in Jeddah,'],
+            quizCorrect: 1,
+            explanationAr: 'أحسنت! الاسم Sara والمدينة Jeddah بدآ بحرف كبير.'
+          },
+          {
+            type: 'speaking',
+            badge: '6/6 • التحدث والنطق (Speaking)',
+            badgeColor: 'bg-rose-100 text-rose-800',
+            icon: 'fa-microphone-lines',
+            title: 'التحدي الشفهي الختامي للجلسة 1',
+            promptEn: 'I am ready to prepare for the STEP exam.',
+            promptAr: 'أنا مستعد للتحضير لاختبار ستيب.',
+            tipsAr: 'استمع للنطق النموذجي وكرر الجملة بصوت واضح.'
+          }
+        ]
+      }
+    ];
+
+    // Generate Sessions 2 to 10 dynamically
+    for (let i = 2; i <= 10; i++) {
+      level1Sessions.push({
+        id: i,
+        title: `الجلسة ${i}: التدريب الأكاديمي المتقدم لاختبار STEP`,
+        subtitle: 'مفردات ومراجعة شاملة لقواعد وقراءة ستيب',
+        cards: [
+          {
+            type: 'vocab',
+            badge: '1/6 • مفردات STEP الأساسية',
+            badgeColor: 'bg-amber-100 text-amber-800',
+            icon: 'fa-spell-check',
+            title: `مفردات أكاديمية للجلسة ${i}`,
+            vocabItems: [
+              { word: 'Significant (adj)', ar: 'هام / ملحوظ' },
+              { word: 'Analysis (n)', ar: 'تحليل' },
+              { word: 'Evaluate (v)', ar: 'يُقيّم' }
+            ],
+            exampleEn: 'Researchers evaluate significant data during analysis.',
+            exampleAr: 'يُقيّم الباحثون بيانات هامة أثناء التحليل.',
+            arabicTip: '💡 تلميح STEP: كلمة (Significant) مرادف أساسي لـ (Important).',
+            quizQuestion: 'What is a synonym for "significant"?',
+            quizOptions: ['Trivial', 'Important', 'Unnoticed', 'Slow'],
+            quizCorrect: 1,
+            explanationAr: 'صحيح! مرادف significant هو important.'
+          },
+          {
+            type: 'grammar',
+            badge: '2/6 • القواعد (Grammar)',
+            badgeColor: 'bg-indigo-100 text-indigo-800',
+            icon: 'fa-code-branch',
+            title: `تطبيق القاعدة النحوية للجلسة ${i}`,
+            ruleExplanationAr: 'في اختبار ستيب، احرص على تمييز أزمنة الأفعال وأدوات الربط المناسبة لسياق الجملة.',
+            formulaEn: 'Subject + Auxiliary Verb + Main Verb',
+            quizQuestion: 'Choose the correct grammar option for this sentence structure.',
+            quizOptions: ['Option A', 'Option B (Correct)', 'Option C', 'Option D'],
+            quizCorrect: 1,
+            explanationAr: 'أحسنت! الخيار الثاني هو المطابق للقاعدة النحوية.'
+          },
+          {
+            type: 'reading',
+            badge: '3/6 • قراءة صوتية (Audio Reading)',
+            badgeColor: 'bg-emerald-100 text-emerald-800',
+            icon: 'fa-headphones',
+            title: `قراءة استيعابية للجلسة ${i}`,
+            sentences: [
+              'Academic texts in STEP require careful reading and vocabulary analysis.',
+              'Successful candidates practice daily to improve their reading speed and comprehension.'
+            ],
+            arabicSummaryAr: 'ملخص القطعة: تتطلب النصوص الأكاديمية قراءة متأنية وممارسة يومية لتحسين السرعة والفهم.',
+            quizQuestion: 'What do successful candidates do daily?',
+            quizOptions: ['Ignore reading', 'Practice daily', 'Sleep early', 'Skip vocabulary'],
+            quizCorrect: 1,
+            explanationAr: 'إجابة دقيقة! النص ذكر: practice daily.'
+          },
+          {
+            type: 'listening',
+            badge: '4/6 • استماع (Listening)',
+            badgeColor: 'bg-sky-100 text-sky-800',
+            icon: 'fa-ear-listen',
+            title: `مقطع استماع قصير للجلسة ${i}`,
+            audioScript: 'Speaker: Consistent daily practice is the absolute key to achieving a high score on the STEP exam.',
+            arabicContextAr: 'استمع للمتحدث وركّز على نصيحته الرئيسية.',
+            quizQuestion: 'What is the key to achieving a high score according to the speaker?',
+            quizOptions: ['Consistent daily practice', 'Pure luck', 'Memorizing one page', 'Taking a break'],
+            quizCorrect: 0,
+            explanationAr: 'ممتاز! المتحدث أكد على أهمية الممارسة اليومية المستمرة.'
+          },
+          {
+            type: 'writing',
+            badge: '5/6 • تحليل الكتابة (Writing Analysis)',
+            badgeColor: 'bg-purple-100 text-purple-800',
+            icon: 'fa-pen-nib',
+            title: `مهارة الكتابة وتحليل الأخطاء للجلسة ${i}`,
+            lessonNoteAr: 'تأكد دائماً من التوافق بين الفعل والفاعل وصحة استخدام أدوات الوصل.',
+            quizQuestion: 'Select the correctly structured sentence:',
+            quizOptions: ['He study hard and passes.', 'He studies hard and passes.', 'He studying hard.', 'He studied hard and pass.'],
+            quizCorrect: 1,
+            explanationAr: 'أحسنت! الفاعل المفرد يتبع بأفعال مضارعة تحمل s التذكير والتأنيث (studies / passes).'
+          },
+          {
+            type: 'speaking',
+            badge: '6/6 • التحدث والنطق (Speaking)',
+            badgeColor: 'bg-rose-100 text-rose-800',
+            icon: 'fa-microphone-lines',
+            title: `التحدي الشفهي للجلسة ${i}`,
+            promptEn: 'Continuous practice builds confidence and success.',
+            promptAr: 'الممارسة المستمرة تبني الثقة والنجاح.',
+            tipsAr: 'كرر الجملة بصوت واضح ثم أتمّ الجلسة لفتح الدرس التالي.'
+          }
+        ]
+      });
+    }
+
+    function stopSpeech() {
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      appState.isSpeaking = false;
+    }
+
+    function speakText(text, rate = appState.speechRate) {
+      stopSpeech();
+      if (!('speechSynthesis' in window)) return;
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'en-US';
+      u.rate = rate;
+      window.speechSynthesis.speak(u);
+    }
+
+    function playReadingPassageSentences(sentences, rate = appState.speechRate) {
+      stopSpeech();
+      if (!('speechSynthesis' in window)) return;
+      let idx = 0;
+      function speakNext() {
+        document.querySelectorAll('.sentence-span').forEach(el => el.classList.remove('sentence-active'));
+        if (idx >= sentences.length) return;
+        const activeSpan = document.getElementById(`read-sent-${idx}`);
+        if (activeSpan) activeSpan.classList.add('sentence-active');
+        const u = new SpeechSynthesisUtterance(sentences[idx]);
+        u.lang = 'en-US';
+        u.rate = rate;
+        u.onend = () => { idx++; speakNext(); };
+        window.speechSynthesis.speak(u);
+      }
+      speakNext();
+    }
+
+    function switchScreen(screenName) {
+      stopSpeech();
+      ['onboarding', 'placement', 'placement-result', 'roadmap', 'feed'].forEach(s => {
+        const el = document.getElementById(`screen-${s}`);
+        if (el) el.classList.add('hidden');
+      });
+      const target = document.getElementById(`screen-${screenName}`);
+      if (target) {
+        target.classList.remove('hidden');
+        target.classList.remove('card-enter');
+        void target.offsetWidth;
+        target.classList.add('card-enter');
+      }
+    }
+
+    function updateHeaderUI() {
+      document.getElementById('header-level-text').textContent = `المستوى ${appState.level} (Pre-A1)`;
+      document.getElementById('xp-counter').textContent = appState.xp;
+      document.getElementById('streak-counter').textContent = appState.streak;
+      const pct = Math.min(100, Math.round((appState.minutesCompleted / appState.dailyMinutesGoal) * 100));
+      document.getElementById('daily-goal-bar').style.width = `${pct}%`;
+      document.getElementById('daily-goal-label').textContent = `${appState.minutesCompleted} / ${appState.dailyMinutesGoal} دقيقة`;
+    }
+
+    function addXP(points, minutesAdd = 1) {
+      appState.xp += points;
+      appState.minutesCompleted = Math.min(appState.dailyMinutesGoal, appState.minutesCompleted + minutesAdd);
+      updateHeaderUI();
+    }
+
+    function showToast(htmlMsg) {
+      const box = document.getElementById('toast-box');
+      const msg = document.getElementById('toast-msg');
+      msg.innerHTML = htmlMsg;
+      box.classList.remove('opacity-0', 'translate-y-[-10px]');
+      box.classList.add('opacity-100', 'translate-y-0');
+      setTimeout(() => {
+        box.classList.remove('opacity-100', 'translate-y-0');
+        box.classList.add('opacity-0', 'translate-y-[-10px]');
+      }, 2600);
+    }
+
+    function selectTimeGoal(mins, btn) {
+      appState.dailyMinutesGoal = mins;
+      document.querySelectorAll('.goal-time-btn').forEach(b => {
+        b.className = 'goal-time-btn p-3 rounded-2xl border-2 border-slate-200 bg-white text-center transition-all hover:border-emerald-400';
+      });
+      btn.className = 'goal-time-btn p-3 rounded-2xl border-2 border-emerald-500 bg-emerald-50/70 text-center transition-all';
+      updateHeaderUI();
+    }
+
+    function selectVocabGoal(words, btn) {
+      appState.weeklyVocabGoal = words;
+      document.querySelectorAll('.goal-vocab-btn').forEach(b => {
+        b.className = 'goal-vocab-btn p-3 rounded-2xl border-2 border-slate-200 bg-white text-center transition-all';
+      });
+      btn.className = 'goal-vocab-btn p-3 rounded-2xl border-2 border-amber-500 bg-amber-50/70 text-center transition-all';
+    }
+
+    function startPlacementTest() {
+      appState.placementIndex = 0;
+      appState.placementScore = 0;
+      switchScreen('placement');
+      renderPlacementQuestion();
+    }
+
+    function renderPlacementQuestion() {
+      appState.placementAnswered = false;
+      const q = placementQuestions[appState.placementIndex];
+      const total = placementQuestions.length;
+
+      document.getElementById('placement-counter').textContent = `سؤال ${appState.placementIndex + 1} من ${total}`;
+      document.getElementById('placement-progress-bar').style.width = `${((appState.placementIndex + 1) / total) * 100}%`;
+      document.getElementById('placement-skill-tag').textContent = q.skill;
+      document.getElementById('placement-level-indicator').textContent = `معايرة المستوى ${q.level}`;
+
+      const ctxBox = document.getElementById('placement-context-box');
+      if (q.context) {
+        ctxBox.classList.remove('hidden');
+        document.getElementById('placement-context-text').textContent = q.context;
+      } else {
+        ctxBox.classList.add('hidden');
+      }
+
+      document.getElementById('placement-question-text').textContent = q.question;
+      const optionsContainer = document.getElementById('placement-options');
+      optionsContainer.innerHTML = '';
+
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'en-text w-full p-3.5 rounded-2xl border-2 border-slate-200 bg-white hover:border-emerald-400 text-sm font-semibold text-slate-800 flex items-center justify-between transition-all';
+        btn.innerHTML = `<span><strong class="text-slate-400 mr-2">${String.fromCharCode(65 + idx)}.</strong> ${opt}</span><span class="status-icon"></span>`;
+        btn.onclick = () => handlePlacementAnswer(idx, btn);
+        optionsContainer.appendChild(btn);
+      });
+    }
+
+    function handlePlacementAnswer(selectedIdx, btnElement) {
+      if (appState.placementAnswered) return;
+      appState.placementAnswered = true;
+      const q = placementQuestions[appState.placementIndex];
+      const allBtns = document.getElementById('placement-options').querySelectorAll('button');
+
+      if (selectedIdx === q.correct) {
+        appState.placementScore++;
+        btnElement.classList.remove('border-slate-200');
+        btnElement.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-900');
+        btnElement.querySelector('.status-icon').innerHTML = '<i class="fa-solid fa-circle-check text-emerald-600"></i>';
+      } else {
+        btnElement.classList.remove('border-slate-200');
+        btnElement.classList.add('border-rose-500', 'bg-rose-50', 'text-rose-900');
+        btnElement.querySelector('.status-icon').innerHTML = '<i class="fa-solid fa-circle-xmark text-rose-600"></i>';
+        allBtns[q.correct].classList.add('border-emerald-500', 'bg-emerald-50');
+      }
+
+      setTimeout(() => {
+        appState.placementIndex++;
+        if (appState.placementIndex < placementQuestions.length) {
+          renderPlacementQuestion();
+        } else {
+          addXP(30, 3);
+          switchScreen('placement-result');
+        }
+      }, 850);
+    }
+
+    function openRoadmap() {
+      switchScreen('roadmap');
+      document.getElementById('roadmap-completion-badge').textContent = `${appState.completedSessions.length} / 10 جلسات مكتملة`;
+      const container = document.getElementById('session-list-container');
+      container.innerHTML = '';
+
+      level1Sessions.forEach(sess => {
+        const isCompleted = appState.completedSessions.includes(sess.id);
+        const isUnlocked = sess.id <= appState.unlockedSession;
+
+        let cardStyle = 'border-slate-200 bg-slate-50/70 opacity-65 cursor-not-allowed';
+        let circleStyle = 'bg-slate-300 text-white';
+        let statusIcon = '<i class="fa-solid fa-lock text-slate-400"></i>';
+        let statusLabel = 'مغلقة';
+
+        if (isCompleted) {
+          cardStyle = 'border-emerald-500 bg-emerald-50/60 hover:bg-emerald-50 cursor-pointer shadow-xs';
+          circleStyle = 'bg-emerald-600 text-white';
+          statusIcon = '<i class="fa-solid fa-circle-check text-emerald-600 text-lg"></i>';
+          statusLabel = 'مكتملة';
+        } else if (isUnlocked) {
+          cardStyle = 'border-teal-600 bg-white hover:border-emerald-500 cursor-pointer shadow-sm ring-2 ring-emerald-500/15';
+          circleStyle = 'bg-[#1B365D] text-white';
+          statusIcon = '<span class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs shadow-xs"><i class="fa-solid fa-play"></i></span>';
+          statusLabel = 'متاحة الآن';
+        }
+
+        const node = document.createElement('div');
+        node.className = `rounded-2xl border-2 p-3.5 flex items-center justify-between gap-3 transition-all ${cardStyle}`;
+        node.innerHTML = `
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl ${circleStyle} flex items-center justify-center font-black text-base shrink-0">${sess.id}</div>
+            <div>
+              <div class="flex items-center gap-2 mb-0.5">
+                <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full ${isCompleted ? 'bg-emerald-100 text-emerald-800' : isUnlocked ? 'bg-amber-100 text-amber-800' : 'bg-slate-200 text-slate-600'}">${statusLabel}</span>
+                <span class="text-[10px] font-bold text-slate-400">6 بطاقات تفاعلية</span>
+              </div>
+              <h3 class="text-xs font-black text-slate-900 leading-snug">${sess.title}</h3>
+              <p class="text-[11px] text-slate-500 mt-0.5">${sess.subtitle}</p>
+            </div>
+          </div>
+          <div class="shrink-0">${statusIcon}</div>
+        `;
+
+        if (isUnlocked) {
+          node.onclick = () => startSession(sess.id);
+        } else {
+          node.onclick = () => showToast('<i class="fa-solid fa-lock text-amber-400"></i> أكمل الجلسة السابقة لفتح هذه الجلسة!');
+        }
+        container.appendChild(node);
+      });
+    }
+
+    function startSession(sessionId) {
+      appState.activeSessionId = sessionId;
+      appState.currentCardIndex = 0;
+      switchScreen('feed');
+      renderReelCard();
+    }
+
+    function renderReelCard() {
+      stopSpeech();
+      const sess = level1Sessions.find(s => s.id === appState.activeSessionId);
+      if (!sess) return;
+      const card = sess.cards[appState.currentCardIndex];
+      const totalCards = sess.cards.length;
+
+      document.getElementById('active-session-title').textContent = `الجلسة ${sess.id} من 10`;
+      document.getElementById('active-session-subtitle').textContent = `بطاقة ${appState.currentCardIndex + 1} من ${totalCards}`;
+      document.getElementById('reel-step-counter').textContent = `${appState.currentCardIndex + 1} / ${totalCards}`;
+
+      const dotsEl = document.getElementById('reels-dots');
+      dotsEl.innerHTML = sess.cards.map((_, i) => `
+        <div class="h-1.5 flex-1 rounded-full transition-all duration-300 ${i === appState.currentCardIndex ? 'bg-emerald-500' : i < appState.currentCardIndex ? 'bg-emerald-200' : 'bg-slate-200'}"></div>
+      `).join('');
+
+      document.getElementById('prev-card-btn').disabled = appState.currentCardIndex === 0;
+      const nextBtn = document.getElementById('next-card-btn');
+      if (appState.currentCardIndex === totalCards - 1) {
+        nextBtn.classList.add('hidden');
+      } else {
+        nextBtn.classList.remove('hidden');
+      }
+
+      const container = document.getElementById('reel-card-container');
+      let bodyHTML = `
+        <div class="bg-white border-2 border-slate-100 rounded-3xl p-4 shadow-sm flex-1 flex flex-col justify-between card-enter">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="inline-flex items-center gap-1.5 text-[11px] font-extrabold px-3 py-1 rounded-full ${card.badgeColor}">
+                <i class="fa-solid ${card.icon}"></i>
+                <span>${card.badge}</span>
+              </span>
+              <span class="text-[11px] font-bold text-slate-400">المستوى 1</span>
+            </div>
+            <h3 class="text-sm font-black text-slate-900 mb-3">${card.title}</h3>
+      `;
+
+      if (card.type === 'vocab') {
+        bodyHTML += `
+          <div class="bg-gradient-to-br from-[#1B365D] to-slate-800 text-white rounded-2xl p-3.5 mb-3 space-y-2">
+            ${card.vocabItems.map(v => `
+              <div class="flex items-center justify-between border-b border-white/10 pb-1.5 last:border-b-0 last:pb-0">
+                <span class="en-text text-sm font-extrabold text-amber-300">${v.word}</span>
+                <span class="text-xs font-bold text-emerald-200">${v.ar}</span>
+              </div>
+            `).join('')}
+            <div class="pt-2 border-t border-white/15">
+              <div class="flex items-center justify-between gap-2">
+                <p class="en-text text-xs text-slate-200 italic">"${card.exampleEn}"</p>
+                <button type="button" id="vocab-speak-btn" class="w-8 h-8 rounded-xl bg-white/15 hover:bg-white/25 flex items-center justify-center text-white shrink-0"><i class="fa-solid fa-volume-high text-xs"></i></button>
+              </div>
+              <p class="text-[11px] text-slate-300 mt-1">${card.exampleAr}</p>
+            </div>
+          </div>
+          <div class="bg-amber-50 border border-amber-200 rounded-2xl p-3 text-xs text-amber-950 leading-relaxed mb-3">${card.arabicTip}</div>
+          ${renderCardQuizHTML(card)}
+        `;
+      } else if (card.type === 'grammar') {
+        bodyHTML += `
+          <p class="text-xs text-slate-700 leading-relaxed mb-3">${card.ruleExplanationAr}</p>
+          <div class="en-text bg-indigo-50 border border-indigo-200 text-indigo-900 font-bold text-xs p-3 rounded-2xl mb-3 text-center">${card.formulaEn}</div>
+          ${renderCardQuizHTML(card)}
+        `;
+      } else if (card.type === 'reading') {
+        const sentencesSpans = card.sentences.map((s, idx) => `<span id="read-sent-${idx}" class="sentence-span">${s} </span>`).join('');
+        bodyHTML += `
+          <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-2.5 mb-3 flex items-center justify-between gap-2">
+            <div class="flex items-center gap-1.5">
+              <button type="button" id="play-reading-normal" class="text-[11px] font-extrabold bg-emerald-600 text-white px-3 py-1.5 rounded-xl"><i class="fa-solid fa-play"></i> عادّي</button>
+              <button type="button" id="play-reading-slow" class="text-[11px] font-extrabold bg-slate-700 text-white px-2.5 py-1.5 rounded-xl">🐢 بطيء</button>
+            </div>
+            <div id="reading-wave-box" class="audio-wave-box flex items-center gap-1 px-1"><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div></div>
+          </div>
+          <div class="en-text bg-slate-50 border border-slate-200 rounded-2xl p-3 text-xs text-slate-800 leading-relaxed mb-2.5">${sentencesSpans}</div>
+          <details class="mb-3 bg-slate-50 rounded-xl p-2 border border-slate-200/70">
+            <summary class="text-[11px] font-extrabold text-emerald-700 cursor-pointer">ملخص بالعربية</summary>
+            <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">${card.arabicSummaryAr}</p>
+          </details>
+          ${renderCardQuizHTML(card)}
+        `;
+      } else if (card.type === 'listening') {
+        bodyHTML += `
+          <p class="text-xs text-slate-600 leading-relaxed mb-3">${card.arabicContextAr}</p>
+          <div class="bg-sky-50 border border-sky-200 rounded-2xl p-3 mb-2.5 flex items-center justify-between gap-2">
+            <button type="button" id="play-listening-btn" class="duo-btn bg-sky-600 text-white font-extrabold text-xs px-3.5 py-2 rounded-xl"><i class="fa-solid fa-volume-high"></i> تشغيل المقطع</button>
+          </div>
+          <details class="mb-3 bg-slate-50 rounded-xl p-2 border border-slate-200/70">
+            <summary class="text-[11px] font-bold text-slate-500 cursor-pointer">إظهار النص (Transcript)</summary>
+            <p class="en-text text-xs text-slate-700 mt-1.5 leading-relaxed">${card.audioScript}</p>
+          </details>
+          ${renderCardQuizHTML(card)}
+        `;
+      } else if (card.type === 'writing') {
+        bodyHTML += `
+          <div class="bg-purple-50 border border-purple-200 rounded-2xl p-3 text-xs text-purple-950 leading-relaxed mb-3">${card.lessonNoteAr}</div>
+          ${renderCardQuizHTML(card)}
+        `;
+      } else if (card.type === 'speaking') {
+        bodyHTML += `
+          <p class="text-xs text-slate-600 leading-relaxed mb-3">${card.tipsAr}</p>
+          <div class="bg-rose-50/70 border-2 border-dashed border-rose-300 rounded-2xl p-4 mb-4 text-center">
+            <div class="text-[11px] font-extrabold text-rose-700 mb-1.5">🎙️ كرّر الجملة الإنجليزية:</div>
+            <p class="en-text text-base font-extrabold text-slate-900 leading-relaxed mb-2 text-center">"${card.promptEn}"</p>
+            <p class="text-xs text-slate-600 mb-3">${card.promptAr}</p>
+            <button type="button" id="listen-speaking-btn" class="text-xs font-extrabold bg-white text-rose-700 border border-rose-200 px-3.5 py-2 rounded-xl"><i class="fa-solid fa-volume-high"></i> استمع للنموذج</button>
+          </div>
+          <button type="button" onclick="completeSession(${sess.id})" class="w-full duo-btn duo-btn-emerald text-white font-extrabold py-3.5 px-4 rounded-2xl text-sm flex items-center justify-center gap-2">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>إتمام الجلسة ${sess.id} وفتح التالية (+50 XP)</span>
+          </button>
+        `;
+      }
+
+      bodyHTML += `</div></div>`;
+      container.innerHTML = bodyHTML;
+
+      if (card.type === 'vocab') {
+        document.getElementById('vocab-speak-btn').onclick = () => speakText(card.exampleEn, 0.9);
+      } else if (card.type === 'reading') {
+        document.getElementById('play-reading-normal').onclick = () => playReadingPassageSentences(card.sentences, 0.9);
+        document.getElementById('play-reading-slow').onclick = () => playReadingPassageSentences(card.sentences, 0.7);
+      } else if (card.type === 'listening') {
+        document.getElementById('play-listening-btn').onclick = () => speakText(card.audioScript, 0.85);
+      } else if (card.type === 'speaking') {
+        document.getElementById('listen-speaking-btn').onclick = () => speakText(card.promptEn, 0.85);
+      }
+    }
+
+    function renderCardQuizHTML(card) {
+      return `
+        <div class="border-t border-slate-100 pt-2.5">
+          <div class="text-[11px] font-extrabold text-slate-400 mb-1">تحقق سريع من فهمك:</div>
+          <p class="en-text text-xs font-bold text-slate-800 mb-2.5 leading-snug">${card.quizQuestion}</p>
+          <div class="space-y-2" id="card-quiz-options">
+            ${card.quizOptions.map((opt, idx) => `
+              <button type="button" onclick="checkCardQuiz(${idx}, this)" class="en-text w-full p-2.5 rounded-xl border-2 border-slate-200 bg-white hover:border-emerald-400 text-xs font-semibold text-slate-800 flex items-center justify-between transition-all">
+                <span><strong class="text-slate-400 mr-1.5">${String.fromCharCode(65 + idx)}.</strong> ${opt}</span>
+                <span class="q-icon"></span>
+              </button>
+            `).join('')}
+          </div>
+          <div id="card-arabic-explanation" class="hidden mt-2.5 p-3 rounded-2xl text-xs leading-relaxed"></div>
+        </div>
+      `;
+    }
+
+    function checkCardQuiz(selectedIdx, btn) {
+      const sess = level1Sessions.find(s => s.id === appState.activeSessionId);
+      const card = sess.cards[appState.currentCardIndex];
+      const optionsWrap = document.getElementById('card-quiz-options');
+      if (optionsWrap.dataset.answered === 'true') return;
+      optionsWrap.dataset.answered = 'true';
+
+      const allBtns = optionsWrap.querySelectorAll('button');
+      const expBox = document.getElementById('card-arabic-explanation');
+
+      if (selectedIdx === card.quizCorrect) {
+        btn.classList.remove('border-slate-200');
+        btn.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-900');
+        btn.querySelector('.q-icon').innerHTML = '<i class="fa-solid fa-circle-check text-emerald-600"></i>';
+        expBox.className = 'mt-2.5 p-3 rounded-2xl text-xs leading-relaxed bg-emerald-50 border border-emerald-200 text-emerald-950';
+        expBox.innerHTML = `<div class="font-black text-emerald-700 mb-0.5">إجابة صحيحة! (+10 XP)</div>${card.explanationAr}`;
+        addXP(10, 1);
+      } else {
+        btn.classList.remove('border-slate-200');
+        btn.classList.add('border-rose-500', 'bg-rose-50', 'text-rose-900');
+        btn.querySelector('.q-icon').innerHTML = '<i class="fa-solid fa-circle-xmark text-rose-600"></i>';
+        allBtns[card.quizCorrect].classList.add('border-emerald-500', 'bg-emerald-50');
+        expBox.className = 'mt-2.5 p-3 rounded-2xl text-xs leading-relaxed bg-amber-50 border border-amber-200 text-amber-950';
+        expBox.innerHTML = `<div class="font-black text-amber-800 mb-0.5">الشرح والتوضيح:</div>${card.explanationAr}`;
+      }
+      expBox.classList.remove('hidden');
+    }
+
+    function nextReelCard() {
+      const sess = level1Sessions.find(s => s.id === appState.activeSessionId);
+      if (sess && appState.currentCardIndex < sess.cards.length - 1) {
+        appState.currentCardIndex++;
+        renderReelCard();
+      }
+    }
+
+    function prevReelCard() {
+      if (appState.currentCardIndex > 0) {
+        appState.currentCardIndex--;
+        renderReelCard();
+      }
+    }
+
+    function completeSession(sessionId) {
+      if (!appState.completedSessions.includes(sessionId)) {
+        appState.completedSessions.push(sessionId);
+        addXP(50, 5);
+      }
+      if (sessionId === appState.unlockedSession && appState.unlockedSession < 10) {
+        appState.unlockedSession++;
+        showToast(`أحسنت! تم فتح الجلسة ${appState.unlockedSession} (+50 XP)`);
+      }
+      openRoadmap();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      updateHeaderUI();
+    });
+  </script>
+</body>
+</html>
