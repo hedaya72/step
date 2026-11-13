@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أكاديمية ستيب | STEP Academy — المستوى 1 (10 جلسات)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1B365D;
+            --secondary: #2C6E7F;
+            --accent: #E07A5F;
+            --success: #2A9D8F;
+            --bg: #F4F7F9;
+            --card-bg: #FFFFFF;
+            --text-main: #1F2937;
+            --text-muted: #6B7280;
+            --border: #E5E7EB;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        #app {
+            width: 100%;
+            max-width: 440px;
+            height: 100vh;
+            max-height: 900px;
+            background-color: var(--card-bg);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (min-width: 441px) {
+            #app {
+                border-radius: 24px;
+                height: 88vh;
+            }
+        }
+
+        .screen {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .logo {
+            font-size: 19px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .badge {
+            background: #FEF3C7;
+            color: #D97706;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            padding: 14px 18px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.1s, background-color 0.2s;
+            width: 100%;
+            text-align: center;
+            margin-top: 12px;
+        }
+
+        .btn:active { transform: scale(0.98); }
+        .btn-secondary { background-color: #E2E8F0; color: var(--primary); }
+        .btn-success { background-color: var(--success); color: white; }
+
+        /* Session Roadmap Path */
+        .session-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-bottom: 24px;
+        }
+
+        .session-node {
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #FFFFFF;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .session-node.unlocked {
+            border-color: var(--secondary);
+            background: #F0F9FA;
+        }
+
+        .session-node.completed {
+            border-color: var(--success);
+            background: #ECFDF5;
+        }
+
+        .session-node.locked {
+            opacity: 0.55;
+            cursor: not-allowed;
+            background: #F9FAFB;
+        }
+
+        .node-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .node-num {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 15px;
+            flex-shrink: 0;
+        }
+
+        .session-node.completed .node-num { background: var(--success); }
+        .session-node.locked .node-num { background: #9CA3AF; }
+
+        /* Reels Feed */
+        .feed-container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100% - 56px);
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scrollbar-width: none;
+        }
+        .feed-container::-webkit-scrollbar { display: none; }
+
+        .reel-card {
+            scroll-snap-align: start;
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 18px;
+            background: white;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .skill-tag {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            background: #E0F2FE;
+            color: #0369A1;
+        }
+
+        .english-box {
+            direction: ltr;
+            text-align: left;
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--primary);
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            padding: 14px;
+            border-radius: 12px;
+            margin: 10px 0;
+            line-height: 1.5;
+        }
+
+        .arabic-explanation {
+            font-size: 14.5px;
+            color: #374151;
+            background: #FFFBEB;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border-right: 4px solid #F59E0B;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .audio-controls {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .audio-btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .quiz-options button {
+            display: block;
+            width: 100%;
+            padding: 11px 14px;
+            margin: 6px 0;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            background: white;
+            text-align: left;
+            direction: ltr;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+
+        .quiz-options button.correct {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+
+        .quiz-options button.incorrect {
+            background: #EF4444;
+            color: white;
+            border-color: #EF4444;
+        }
+
+        .speaking-box {
+            background: #F3E8FF;
+            border: 1.5px dashed #9333EA;
+            border-radius: 12px;
+            padding: 14px;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .options-grid { display: flex; flex-direction: column; gap: 10px; margin: 14px 0; }
+        .option-card {
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 13px;
+            cursor: pointer;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+        }
+        .option-card.selected { border-color: var(--primary); background: #EEF2F6; }
+    </style>
+</head>
+<body>
+
+<div id="app">
+    <!-- SCREEN 1: Onboarding & Placement Entry -->
+    <div id="screen-onboarding" class="screen active">
+        <div class="top-bar">
+            <div class="logo">🎯 أكاديمية ستيب | STEP</div>
+            <div class="badge">المستوى التأسيسي 1</div>
+        </div>
+        <h2 style="font-size: 20px; color: var(--primary); margin-bottom: 6px;">خطة التأسيس الشاملة لاختبار STEP</h2>
+        <p style="color: var(--text-muted); font-size: 13.5px; margin-bottom: 14px;">اختر هدفك اليومي، ثم ابدأ باختبار تحديد المستوى أو ادخل مباشرة إلى مسار الجلسات الـ 10.</p>
+        
+        <label style="font-weight: 700; font-size: 13.5px;">مدة الدراسة اليومية:</label>
+        <div class="options-grid" id="time-options">
+            <div class="option-card selected" onclick="selectOption(this, 'time', '10')"><span>10 دقائق (جلسة واحدة يومياً)</span><span>⚡</span></div>
+            <div class="option-card" onclick="selectOption(this, 'time', '20')"><span>20 دقيقة (جلستان يومياً)</span><span>🚀</span></div>
+        </div>
+
+        <button class="btn" onclick="goToScreen('screen-placement')">ابدأ اختبار تحديد المستوى (5 أسئلة)</button>
+        <button class="btn btn-secondary" onclick="openRoadmap(1)">الدخول مباشرة إلى مسار المستوى 1 (10 جلسات)</button>
+    </div>
+
+    <!-- SCREEN 2: Quick Diagnostic Placement -->
+    <div id="screen-placement" class="screen">
+        <div class="top-bar">
+            <div class="logo">اختبار تحديد المستوى</div>
+            <div id="q-counter" style="font-weight: 700; color: var(--text-muted); font-size: 13px;">1 / 5</div>
+        </div>
+        <div id="placement-quiz-box" style="margin: auto 0;"></div>
+    </div>
+
+    <!-- SCREEN 3: Level 1 Roadmap (10 Sequential Sessions) -->
+    <div id="screen-roadmap" class="screen">
+        <div class="top-bar">
+            <div>
+                <div class="logo">مسار المستوى 1 (Pre-A1 → A1)</div>
+                <div style="font-size: 12.5px; color: var(--text-muted);" id="roadmap-subtitle">أكمل كل جلسة لفتح الجلسة التالية</div>
+            </div>
+            <div class="badge" id="xp-badge">⭐ 0 XP</div>
+        </div>
+        <div class="session-list" id="session-list-container"></div>
+        <button class="btn btn-secondary" onclick="goToScreen('screen-onboarding')" style="margin-top: auto;">العودة للبداية</button>
+    </div>
+
+    <!-- SCREEN 4: Session Reels Player -->
+    <div id="screen-feed" class="screen" style="padding: 0;">
+        <div style="background: white; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); z-index: 10;">
+            <button onclick="openRoadmap(1)" style="background: #F1F5F9; border: none; padding: 6px 12px; border-radius: 8px; font-weight: 700; cursor: pointer;">→ المسار</button>
+            <div style="font-weight: 800; color: var(--primary); font-size: 14px;" id="active-session-title">الجلسة 1</div>
+            <span style="font-size: 13px; font-weight: 700; color: #D97706;" id="feed-xp">⭐ 0 XP</span>
+        </div>
+        <div class="feed-container" id="reels-feed-container"></div>
+    </div>
+</div>
+
+<script>
+    let userXP = 0;
+    let unlockedSession = 1; // Tracks highest unlocked session (1 to 10)
+    let completedSessions = [];
+
+    function selectOption(el, group, val) {
+        document.querySelectorAll(`#${group}-options .option-card`).forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+    }
+
+    function goToScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(screenId).classList.add('active');
+        if (screenId === 'screen-placement') loadPlacementQuestion(0);
+    }
+
+    // Quick 5-Item Placement Test
+    const placementQuestions = [
+        { q: "My name ______ Tariq, and I am from Riyadh.", options: ["am", "is", "are", "be"], answer: 1 },
+        { q: "Ali ______ to work by car every day.", options: ["go", "going", "goes", "is go"], answer: 2 },
+        { q: "Please be quiet! The students ______ their test right now.", options: ["take", "takes", "are taking", "took"], answer: 2 },
+        { q: "Millions of tons of dates ______ in Saudi Arabia every year.", options: ["produce", "are produced", "produced", "have produced"], answer: 1 },
+        { q: "Not only ______ the hypothesis, but the study also found new data.", options: ["the findings confirmed", "did the findings confirm", "confirmed the findings", "the findings did confirm"], answer: 1 }
+    ];
+    let pIndex = 0, pScore = 0;
+
+    function loadPlacementQuestion(idx) {
+        if (idx >= placementQuestions.length) {
+            alert(`تم تحديد مستواك بنجاح! نتيجتك: ${pScore}/5. سنبدأ الآن بخطة التأسيس (المستوى 1 - 10 جلسات).`);
+            openRoadmap(1);
+            return;
+        }
+        pIndex = idx;
+        const item = placementQuestions[idx];
+        document.getElementById('q-counter').innerText = `السؤال ${idx + 1} من 5`;
+        document.getElementById('placement-quiz-box').innerHTML = `
+            <div class="english-box">${item.q}</div>
+            <div class="quiz-options">
+                ${item.options.map((opt, i) => `<button onclick="answerPlacement(${i}, ${item.answer})">${opt}</button>`).join('')}
+            </div>
+        `;
+    }
+
+    function answerPlacement(sel, ans) {
+        if (sel === ans) pScore++;
+        loadPlacementQuestion(pIndex + 1);
+    }
+
+    // 10 Complete Pedagogical Sessions for Level 1 (Core STEP Foundations)
+    // Each session has 6 cards: Vocab -> Grammar -> Audio Reading -> Listening -> Writing -> Speaking
+    const level1Sessions = [
+        {
+            id: 1,
+            title: "الجلسة 1: التعريف بالنفس والأفعال المساعدة (Verb to Be)",
+            desc: "مفردات STEP: identify, student, academy • القاعدة: am / is / are",
+            cards: [
+                {
+                    skill: "1/6 • مفردات STEP (Vocabulary)",
+                    title: "كلمات أساسية في نماذج اختبار STEP",
+                    en: "Identify (v) / Candidate (n) / Require (v)",
+                    ar: "• Identify: يُحدّد أو يتعرّف على (تتكرر في أسئلة القراءة: Identify the main idea).<br>• Candidate: مُتقدّم للاختبار.<br>• Require: يتطلّب.",
+                    q: "What does 'Identify' mean in STEP reading questions?",
+                    opts: ["Ignore", "Determine / Recognize", "Delete", "Write"],
+                    ans: 1
+                },
+                {
+                    skill: "2/6 • القواعد (Grammar)",
+                    title: "استخدام (am / is / are) في الجمل الاسمية",
+                    en: "I am a candidate. / He is from Riyadh. / They are ready.",
+                    ar: "في اختبار ستيب، انتبه لمطابقة الفاعل مع الفعل: المفرد (He/She/It) يأخذ is، والجمع (They/We/You) يأخذ are، والضمير I يأخذ am.",
+                    q: "The exam results ______ available online today.",
+                    opts: ["is", "am", "are", "be"],
+                    ans: 2
+                },
+                {
+                    skill: "3/6 • قراءة صوتية (Audio Reading)",
+                    title: "استمع واقرأ البطاقة التعريفية",
+                    passage: "Omar Al-Harbi is a university candidate in Riyadh. His test is at 9:00 AM. He is required to bring his national ID card to the exam center.",
+                    en: "Listen carefully to the passage above.",
+                    ar: "استمع للنص بالضغط على زر الصوت، ولاحظ استخدام الفعل is مع المفرد، وكلمة required بمعنى (مطلوب منه).",
+                    q: "What is Omar required to bring to the exam center?",
+                    opts: ["A dictionary", "His national ID card", "A laptop", "A notebook"],
+                    ans: 1
+                },
+                {
+                    skill: "4/6 • استماع (Listening)",
+                    title: "محادثة قصيرة في مركز الاختبار",
+                    audioOnly: "Clerk: Good morning. Are you here for the STEP exam? Student: Yes, I am. My seat number is forty-two.",
+                    en: "🔊 اضغط للاستماع للحوار ثم أجب عن السؤال:",
+                    ar: "في قسم الاستماع، ركّز على الأرقام والتفاصيل الدقيقة مثل رقم المقعد (forty-two = 42).",
+                    q: "What is the student's seat number?",
+                    opts: ["24", "42", "14", "40"],
+                    ans: 1
+                },
+                {
+                    skill: "5/6 • تحليل الكتابة (Writing Analysis)",
+                    title: "علامات الترقيم والحروف الكبيرة (Capitalization)",
+                    en: "Choose the sentence with CORRECT capitalization:",
+                    ar: "أسماء المدن والأشخاص وأيام الأسبوع وبداية الجملة تبدأ دائماً بحرف كبير (Capital Letter).",
+                    q: "Select the correct sentence:",
+                    opts: ["sara lives in jeddah.", "Sara lives in Jeddah.", "Sara lives in jeddah?", "sara lives in Jeddah."],
+                    ans: 1
+                },
+                {
+                    skill: "6/6 • التحدث والنطق (Speaking Practice)",
+                    title: "تدريب النطق التفاعلي",
+                    speakTarget: "I am ready to prepare for the STEP exam.",
+                    ar: "اقرأ الجملة الإنجليزية بصوت واضح لتثبيت النطق السليم والثقة اللغوية، ثم اضغط إتمام الجلسة.",
+                    isSpeaking: true
+                }
+            ]
+        },
+        {
+            id: 2,
+            title: "الجلسة 2: الروتين اليومي والمضارع البسيط (Present Simple)",
+            desc: "مفردات STEP: schedule, daily, attend • القاعدة: المضارع البسيط",
+            cards: [
+                {
+                    skill: "1/6 • مفردات STEP (Vocabulary)",
+                    title: "مفردات الجداول والدراسة",
+                    en: "Schedule (n) / Attend (v) / Routine (n)",
+                    ar: "• Schedule: جدول مواعيد.<br>• Attend: يحضر (محاضرة أو اختباراً).<br>• Routine: نظام يومي متكرر.",
+                    q: "All students must ______ the morning lecture.",
+                    opts: ["attend", "cancel", "sleep", "forget"],
+                    ans: 0
+                },
+                {
+                    skill: "2/6 • القواعد (Grammar)",
+                    title: "إضافة (s) للفعل في المضارع البسيط",
+                    en: "Khalid studies English every evening. / Students study every day.",
+                    ar: "نستخدم المضارع البسيط للحقائق والعادات المتكررة. إذا كان الفاعل مفرداً غائباً (He/She/It) نضيف s أو es للفعل.",
+                    q: "Noura ______ two academic articles every week.",
+                    opts: ["read", "reads", "reading", "is read"],
+                    ans: 1
+                },
+                {
+                    skill: "3/6 • قراءة صوتية (Audio Reading)",
+                    title: "نص قصير: جدول الدراسة اليومي",
+                    passage: "Faisal follows a strict study schedule. Every morning at 7:00 AM, he reviews twenty STEP vocabulary words before he attends his university classes.",
+                    en: "Listen to the passage and focus on the verbs.",
+                    ar: "لاحظ الأفعال المضارعة (follows, reviews, attends) التي تصف روتين فيصل اليومي.",
+                    q: "When does Faisal review vocabulary words?",
+                    opts: ["At 7:00 PM", "After dinner", "At 7:00 AM", "On weekends only"],
+                    ans: 2
+                },
+                {
+                    skill: "4/6 • استماع (Listening)",
+                    title: "سؤال عن مواعيد المكتبة",
+                    audioOnly: "Student: Excuse me, what time does the library open? Librarian: It opens at eight o'clock in the morning and closes at nine at night.",
+                    en: "🔊 استمع للحوار القصير:",
+                    ar: "انتبه للفرق بين وقت الفتح (eight in the morning = 8:00 AM) ووقت الإغلاق.",
+                    q: "What time does the library open?",
+                    opts: ["8:00 AM", "9:00 AM", "8:00 PM", "9:00 PM"],
+                    ans: 0
+                },
+                {
+                    skill: "5/6 • تحليل الكتابة (Writing Analysis)",
+                    title: "ترتيب ظروف التكرار في الجملة",
+                    en: "Adverbs of frequency (always, usually, often):",
+                    ar: "ظروف التكرار مثل (always) تأتي قبل الفعل الأساسي مباشرة (Subject + always + Verb).",
+                    q: "Choose the correct word order:",
+                    opts: ["Always he arrives early.", "He arrives always early.", "He always arrives early.", "Arrives he always early."],
+                    ans: 2
+                },
+                {
+                    skill: "6/6 • التحدث والنطق (Speaking Practice)",
+                    title: "تدريب النطق التفاعلي",
+                    speakTarget: "She always reviews her lessons in the morning.",
+                    ar: "انطق الجملة بصوت مسموع مع مراعاة نطق حرف s في الأفعال.",
+                    isSpeaking: true
+                }
+            ]
+        }
+    ];
+
+    // Dynamically generate Sessions 3 to 10 with authentic STEP Level 1 curriculum topics
+    const extraSessionsMeta = [
+        { id: 3, title: "الجلسة 3: المفرد والجمع والمعدود (Nouns & Articles)", desc: "مفردات: data, research, factor • القاعدة: a / an / some / many", vocab: "Factor (عامل) / Benefit (فائدة) / Method (طريقة)", gramQ: "There are ______ important factors in this research.", gramOpts: ["much", "many", "a", "an"], gramAns: 1, pass: "Modern research uses many methods to collect accurate data from desert environments.", passQ: "What does modern research collect?", passOpts: ["Accurate data", "Old books", "Rainwater", "Cars"], passAns: 0, listen: "Teacher: Please bring two notebooks and a blue pen tomorrow.", listenQ: "How many notebooks are needed?", listenOpts: ["One", "Two", "Three", "None"], listenAns: 1, writeQ: "Choose the correct article: He is ______ honest researcher.", writeOpts: ["a", "an", "many", "these"], writeAns: 1, speak: "Good research requires accurate data and clear methods." },
+        { id: 4, title: "الجلسة 4: حروف الجر للزمان والمكان (Prepositions: in, on, at)", desc: "مفردات: location, period, century • القاعدة: in / on / at", vocab: "Location (موقع) / Century (قرن) / Region (منطقة)", gramQ: "The conference starts ______ Sunday ______ 10:00 AM.", gramOpts: ["in / on", "on / at", "at / in", "on / in"], gramAns: 1, pass: "In the twenty-first century, solar energy became popular in the Gulf region.", passQ: "Where did solar energy become popular?", passOpts: ["In the Gulf region", "In Antarctica", "Underground", "In Europe only"], passAns: 0, listen: "Guide: The museum is located on King Fahd Road, next to the bank.", listenQ: "Where is the museum?", listenOpts: ["Next to the bank", "Behind the airport", "In another city", "At the station"], listenAns: 0, writeQ: "Select the correct sentence:", writeOpts: ["We travel in June.", "We travel on June.", "We travel at June.", "We travel to June."], writeAns: 0, speak: "Our class begins on Sunday at eight o'clock." },
+        { id: 5, title: "الجلسة 5: المضارع المستمر (Present Continuous)", desc: "مفردات: increase, develop, current • القاعدة: am/is/are + V-ing", vocab: "Increase (يزداد) / Develop (يطوّر) / Current (حالي)", gramQ: "Look at the chart! Population numbers ______ rapidly right now.", gramOpts: ["increase", "are increasing", "increased", "increases"], gramAns: 1, pass: "Saudi cities are developing new public transport networks to reduce traffic congestion.", passQ: "Why are cities developing transport networks?", passOpts: ["To increase traffic", "To reduce traffic congestion", "To close roads", "To stop travel"], passAns: 1, listen: "Caller: Can I speak to Dr. Sami? Secretary: Sorry, he is teaching a class right now.", listenQ: "What is Dr. Sami doing right now?", listenOpts: ["Eating lunch", "Teaching a class", "Driving home", "Sleeping"], listenAns: 1, writeQ: "Which sentence describes an action happening now?", writeOpts: ["They study now.", "They are studying now.", "They studied now.", "They studies now."], writeAns: 1, speak: "Technology is developing very fast in our current era." },
+        { id: 6, title: "الجلسة 6: الماضي البسيط (Past Simple - Regular & Irregular)", desc: "مفردات: discover, ancient, history • القاعدة: الماضي البسيط", vocab: "Discover (يكتشف) / Ancient (قديم جداً) / Evidence (دليل)", gramQ: "Archaeologists ______ ancient tools in Al-Ula last year.", gramOpts: ["discover", "discovered", "are discovering", "discovers"], gramAns: 1, pass: "In 1922, researchers discovered an ancient tomb that provided strong evidence about early trade.", passQ: "When did researchers discover the tomb?", passOpts: ["In 1922", "Last week", "In 2026", "In 1800"], passAns: 0, listen: "Student: Did you pass the practice test yesterday? Friend: Yes, I scored eighty-five!", listenQ: "What did the friend do yesterday?", listenOpts: ["Failed the test", "Scored 85 on the practice test", "Missed the exam", "Lost his book"], listenAns: 1, writeQ: "Choose the correct past form: Yesterday, we ______ to the science museum.", writeOpts: ["go", "went", "gone", "going"], writeAns: 1, speak: "Scientists discovered new evidence in the ancient city." },
+        { id: 7, title: "الجلسة 7: التعبير عن المستقبل (Future: will vs. going to)", desc: "مفردات: predict, plan, goal • القاعدة: will / going to", vocab: "Predict (يتنبأ) / Goal (هدف) / Achieve (يُحقق)", gramQ: "Experts predict that electric cars ______ more common in the future.", gramOpts: ["will become", "became", "are become", "was becoming"], gramAns: 0, pass: "Sara set a clear goal to achieve a high score on STEP. She is going to study two hours every night.", passQ: "How long is Sara going to study every night?", passOpts: ["Two hours", "Ten minutes", "Five hours", "Thirty minutes"], passAns: 0, listen: "Advisor: Next semester, the university will offer a new course in artificial intelligence.", listenQ: "When will the new course be offered?", listenOpts: ["Last year", "Next semester", "Yesterday", "Never"], listenAns: 1, writeQ: "Select the correct future sentence:", writeOpts: ["They will arrives tomorrow.", "They will arrive tomorrow.", "They arriving tomorrow.", "They will arrived tomorrow."], writeAns: 1, speak: "I am going to achieve my goal in the STEP exam." },
+        { id: 8, title: "الجلسة 8: المقارنة والتفضيل (Comparatives & Superlatives)", desc: "مفردات: efficient, major, significant • القاعدة: -er than / the -est", vocab: "Efficient (فعّال) / Major (رئيسي) / Compare (يقارن)", gramQ: "High-speed trains are much ______ than regular buses.", gramOpts: ["fast", "faster", "fastest", "more fast"], gramAns: 1, pass: "Solar energy is cleaner than coal, making it one of the most efficient power sources for desert nations.", passQ: "How does solar energy compare to coal?", passOpts: ["It is dirtier", "It is cleaner", "It is older", "It is slower"], passAns: 1, listen: "Clerk: The blue laptop is cheaper, but the silver one has a larger screen.", listenQ: "Which laptop has a larger screen?", listenOpts: ["The blue one", "The silver one", "Neither", "Both are identical"], listenAns: 1, writeQ: "Choose the correct comparative sentence:", writeOpts: ["Riyadh is bigger than Abha.", "Riyadh is more big than Abha.", "Riyadh is biggest than Abha.", "Riyadh big than Abha."], writeAns: 0, speak: "Reading every day is the most efficient way to learn." },
+        { id: 9, title: "الجلسة 9: الأفعال الناقصة (Modals: can, must, should)", desc: "مفردات: rule, permission, advice • القاعدة: can / must / should", vocab: "Rule (قاعدة/نظام) / Advice (نصيحة) / Allow (يسمح)", gramQ: "All candidates ______ follow the exam hall rules strictly.", gramOpts: ["must", "can't", "shouldn't", "might not"], gramAns: 0, pass: "Before taking the STEP test, students should get enough sleep. Inside the hall, mobile phones are not allowed.", passQ: "What is NOT allowed inside the exam hall?", passOpts: ["Pencils", "Mobile phones", "Candidates", "Chairs"], passAns: 1, listen: "Proctor: You must turn off your phone before entering the testing room.", listenQ: "What must students do before entering?", listenOpts: ["Call their friends", "Turn off their phones", "Eat lunch", "Leave their ID outside"], listenAns: 1, writeQ: "Choose the correct modal structure:", writeOpts: ["You should to study hard.", "You should study hard.", "You should studying hard.", "You should studied hard."], writeAns: 1, speak: "Students must follow the rules and manage their time." },
+        { id: 10, title: "الجلسة 10: أدوات الربط والمراجعة الشاملة (Connectors & Review)", desc: "مفردات: however, therefore, because • الاختبار الختامي للمستوى 1", vocab: "However (مع ذلك) / Therefore (لذلك) / Result (نتيجة)", gramQ: "The weather was very hot; ______, the team completed the outdoor survey.", gramOpts: ["because", "however", "so", "and"], gramAns: 1, pass: "Reading comprehension accounts for forty percent of the STEP exam. Therefore, building strong vocabulary is essential for success.", passQ: "Why is building vocabulary essential according to the passage?", passOpts: ["Because reading is 40% of the exam", "Because there is no reading section", "Because grammar is not tested", "Because the test is only 5 minutes"], passAns: 0, listen: "Instructor: Congratulations! You completed all ten sessions of Level One. You are now ready for Level Two.", listenQ: "What level is the student ready for now?", listenOpts: ["Level Zero", "Level Two", "Level Ten", "None"], listenAns: 1, writeQ: "Choose the properly punctuated compound sentence:", writeOpts: ["He studied hard, so he passed.", "He studied hard so he passed?", "he studied hard, so he passed.", "He studied hard, so he pass."], writeAns: 0, speak: "I completed Level One, and I am ready for the next challenge!" }
+    ];
+
+    extraSessionsMeta.forEach(s => {
+        level1Sessions.push({
+            id: s.id,
+            title: s.title,
+            desc: s.desc,
+            cards: [
+                { skill: "1/6 • مفردات STEP (Vocabulary)", title: "مفردات أكاديمية أساسية", en: s.vocab, ar: "احفظ هذه المفردات لأنها تتكرر باستمرار في نصوص القراءة والاستماع في اختبار STEP.", q: s.gramQ, opts: s.gramOpts, ans: s.gramAns },
+                { skill: "2/6 • القواعد (Grammar)", title: "تطبيق القاعدة النحوية", en: s.gramQ, ar: "اختر الإجابة الصحيحة بناءً على قاعدة الجلسة التي تعلمتها للتو.", q: s.gramQ, opts: s.gramOpts, ans: s.gramAns },
+                { skill: "3/6 • قراءة صوتية (Audio Reading)", title: "اقرأ واستمع للنص", passage: s.pass, en: "Listen to the passage and answer below.", ar: "اضغط على زر الاستماع لقراءة النص بصوت واضح، ثم أجب عن سؤال الفهم.", q: s.passQ, opts: s.passOpts, ans: s.passAns },
+                { skill: "4/6 • استماع (Listening)", title: "تدريب الاستماع القصير", audioOnly: s.listen, en: "🔊 اضغط للاستماع للمقطع الصوتي:", ar: "استمع جيداً للمتحدث ثم اختر الإجابة الدقيقة.", q: s.listenQ, opts: s.listenOpts, ans: s.listenAns },
+                { skill: "5/6 • تحليل الكتابة (Writing Analysis)", title: "اكتشاف الصياغة الصحيحة", en: "Choose the grammatically and stylistically correct option:", ar: "في أسئلة الكتابة في STEP، ابحث عن التوافق النحوي وعلامات الترقيم السليمة.", q: s.writeQ, opts: s.writeOpts, ans: s.writeAns },
+                { skill: "6/6 • التحدث والنطق (Speaking Practice)", title: "التحدي الشفهي الختامي للجلسة", speakTarget: s.speak, ar: "انطق الجملة بصوت مرتفع وواضح، ثم اضغط على زر إتمام الجلسة لفتح الجلسة التالية!", isSpeaking: true }
+            ]
+        });
+    });
+
+    function openRoadmap(level) {
+        goToScreen('screen-roadmap');
+        document.getElementById('xp-badge').innerText = `⭐ ${userXP} XP`;
+        const list = document.getElementById('session-list-container');
+        list.innerHTML = '';
+
+        level1Sessions.forEach(sess => {
+            const isCompleted = completedSessions.includes(sess.id);
+            const isUnlocked = sess.id <= unlockedSession;
+            let statusClass = isCompleted ? 'completed' : (isUnlocked ? 'unlocked' : 'locked');
+            let icon = isCompleted ? '✅' : (isUnlocked ? '▶️' : '🔒');
+
+            const node = document.createElement('div');
+            node.className = `session-node ${statusClass}`;
+            node.innerHTML = `
+                <div class="node-info">
+                    <div class="node-num">${sess.id}</div>
+                    <div>
+                        <div style="font-weight: 800; font-size: 14.5px; color: var(--primary);">${sess.title}</div>
+                        <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">${sess.desc}</div>
+                    </div>
+                </div>
+                <div style="font-size: 18px;">${icon}</div>
+            `;
+            if (isUnlocked) {
+                node.onclick = () => startSession(sess.id);
+            }
+            list.appendChild(node);
+        });
+    }
+
+    function startSession(sessionId) {
+        const sess = level1Sessions.find(s => s.id === sessionId);
+        if (!sess) return;
+
+        goToScreen('screen-feed');
+        document.getElementById('active-session-title').innerText = `الجلسة ${sess.id} من 10`;
+        document.getElementById('feed-xp').innerText = `⭐ ${userXP} XP`;
+
+        const container = document.getElementById('reels-feed-container');
+        container.innerHTML = '';
+        container.scrollTop = 0;
+
+        sess.cards.forEach((card, idx) => {
+            const el = document.createElement('div');
+            el.className = 'reel-card';
+
+            let mediaHtml = '';
+            if (card.passage) {
+                mediaHtml = `
+                    <div class="english-box" style="font-weight: 500; font-size: 15.5px;">${card.passage}</div>
+                    <div class="audio-controls">
+                        <button class="audio-btn" onclick="speakText(\`${card.passage}\`, 0.9)">🔊 استمع للنص (سرعة عادية)</button>
+                        <button class="audio-btn" style="background:#475569;" onclick="speakText(\`${card.passage}\`, 0.7)">🐢 بطيء (0.7x)</button>
+                    </div>
+                `;
+            } else if (card.audioOnly) {
+                mediaHtml = `
+                    <div class="audio-controls">
+                        <button class="audio-btn" onclick="speakText(\`${card.audioOnly}\`, 0.85)">🔊 تشغيل المقطع الصوتي</button>
+                        <button class="audio-btn" style="background:#475569;" onclick="alert(\`${card.audioOnly}\`)">📄 إظهار النص الصوتي</button>
+                    </div>
+                `;
+            }
+
+            let interactionHtml = '';
+            if (card.isSpeaking) {
+                interactionHtml = `
+                    <div class="speaking-box">
+                        <div style="font-size: 13px; color: #6B21A8; font-weight: 700; margin-bottom: 6px;">🎙️ كرّر الجملة التالية بصوت واضح:</div>
+                        <div style="direction: ltr; font-size: 17px; font-weight: 800; color: #1E1B4B; margin-bottom: 10px;">"${card.speakTarget}"</div>
+                        <button class="audio-btn" style="background:#7E22CE;" onclick="speakText(\`${card.speakTarget}\`, 0.85)">🔊 استمع للنطق الصحيح</button>
+                    </div>
+                    <button class="btn btn-success" onclick="completeSession(${sess.id})">✅ إتمام الجلسة ${sess.id} وفتح الجلسة التالية (+50 XP)</button>
+                `;
+            } else {
+                interactionHtml = `
+                    <div style="font-weight: 700; font-size: 14px; margin-bottom: 6px; color: var(--primary);">${card.q}</div>
+                    <div class="quiz-options">
+                        ${card.opts.map((opt, oIdx) => `<button onclick="checkAnswer(this, ${oIdx}, ${card.ans})">${opt}</button>`).join('')}
+                    </div>
+                `;
+            }
+
+            el.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span class="skill-tag">${card.skill}</span>
+                    <span style="font-size:12px; color:var(--text-muted); font-weight:700;">الجلسة ${sess.id}</span>
+                </div>
+                <div style="margin: auto 0;">
+                    <div style="font-size: 16px; font-weight: 800; color: var(--primary); margin-bottom: 6px;">${card.title}</div>
+                    ${!card.passage && !card.audioOnly && !card.isSpeaking ? `<div class="english-box">${card.en}</div>` : ''}
+                    ${mediaHtml}
+                    <div class="arabic-explanation">${card.ar.replace(/\n/g, '<br>')}</div>
+                    ${interactionHtml}
+                </div>
+                <div style="text-align: center; color: var(--text-muted); font-size: 12px;">
+                    ${idx < sess.cards.length - 1 ? 'اسحب للأعلى للبطاقة التالية ⬆️' : 'نهاية الجلسة — اضغط زر الإتمام بالأعلى 🎉'}
+                </div>
+            `;
+            container.appendChild(el);
+        });
+    }
+
+    function speakText(text, rate) {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const u = new SpeechSynthesisUtterance(text);
+            u.lang = 'en-US';
+            u.rate = rate || 0.9;
+            window.speechSynthesis.speak(u);
+        }
+    }
+
+    function checkAnswer(btn, selected, correct) {
+        const buttons = btn.parentElement.querySelectorAll('button');
+        buttons.forEach(b => b.style.pointerEvents = 'none');
+        if (selected === correct) {
+            btn.classList.add('correct');
+            userXP += 10;
+            document.getElementById('feed-xp').innerText = `⭐ ${userXP} XP`;
+        } else {
+            btn.classList.add('incorrect');
+            buttons[correct].classList.add('correct');
+        }
+    }
+
+    function completeSession(sessionId) {
+        if (!completedSessions.includes(sessionId)) {
+            completedSessions.push(sessionId);
+            userXP += 50;
+        }
+        if (sessionId === unlockedSession && unlockedSession < 10) {
+            unlockedSession++;
+        }
+        openRoadmap(1);
+    }
+</script>
+</body>
+</html>
